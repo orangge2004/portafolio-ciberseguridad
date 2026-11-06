@@ -1,0 +1,56 @@
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div class="footer-brand">
+      <a class="brand brand-inverse" href="/">
+        <span class="brand-mark" aria-hidden="true"><%= site.initials %></span>
+        <span class="brand-text">
+          <strong><%= site.name %></strong>
+          <span><%= site.role %></span>
+        </span>
+      </a>
+      <p><%= site.tagline %></p>
+      <p class="footer-status">
+        <span class="status-dot" aria-hidden="true"></span>
+        <%= site.availability %>
+      </p>
+    </div>
+
+    <nav class="footer-column" aria-label="Navegación del pie">
+      <h2>Explorar</h2>
+      <ul>
+        <% site.nav.forEach((item) => { %>
+          <li><a href="<%= item.href %>"><%= item.label %></a></li>
+        <% }) %>
+      </ul>
+    </nav>
+
+    <div class="footer-column">
+      <h2>Práctica</h2>
+      <ul>
+        <% site.practiceAreas.slice(0, 4).forEach((area) => { %>
+          <li><a href="/practicas#<%= area.slug %>"><%= area.title %></a></li>
+        <% }) %>
+      </ul>
+    </div>
+
+    <div class="footer-column">
+      <h2>Contacto</h2>
+      <ul>
+        <li><a href="mailto:<%= site.email %>"><%= site.email %></a></li>
+        <li><%= site.location %></li>
+        <% if (site.socials.length > 0) { %>
+          <li class="footer-socials">
+            <% site.socials.forEach((social) => { %>
+              <a href="<%= social.href %>" rel="noopener noreferrer" target="_blank"><%= social.label %></a>
+            <% }) %>
+          </li>
+        <% } %>
+      </ul>
+    </div>
+  </div>
+
+  <div class="container footer-bottom">
+    <p>© <%= year %> <%= site.name %>. Portafolio personal de aprendizaje.</p>
+    <p>Aprendizaje · Laboratorios · Seguridad ética</p>
+  </div>
+</footer>

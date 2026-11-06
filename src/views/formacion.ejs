@@ -1,0 +1,188 @@
+<section class="page-hero">
+  <div class="container">
+    <p class="eyebrow">Formación</p>
+    <h1>Formación y aprendizaje continuo.</h1>
+    <p class="lead">
+      Certificaciones que ya he completado, con su fecha, duración y diploma
+      verificable. La formación sigue: aquí se irán añadiendo los próximos cursos
+      cuando los termine.
+    </p>
+  </div>
+</section>
+
+<% const completed = site.certifications.filter((c) => c.status === 'Completada'); %>
+<% const totalHours = completed.reduce((sum, c) => sum + (c.hours ?? 0), 0); %>
+<% const years = completed.map((c) => c.date?.slice(0, 4)).filter(Boolean).sort(); %>
+<% const yearRange = years.length > 0 ? `${years[0]} – ${years[years.length - 1]}` : ''; %>
+
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <p class="section-kicker">Certificaciones</p>
+      <h2>Credenciales completadas</h2>
+      <p class="section-sub">
+        Cada tarjeta enlaza al diploma original en PDF y al perfil donde se puede
+        comprobar la credencial.
+      </p>
+    </div>
+
+    <% if (site.certifications.length > 0) { %>
+      <div class="cert-summary" aria-label="Resumen de formación">
+        <div class="cert-summary-item">
+          <strong><%= completed.length %></strong>
+          <span><%= completed.length === 1 ? 'Certificación completada' : 'Certificaciones completadas' %></span>
+        </div>
+        <div class="cert-summary-item">
+          <strong><%= totalHours %> h</strong>
+          <span>De formación práctica</span>
+        </div>
+        <div class="cert-summary-item">
+          <strong><%= yearRange %></strong>
+          <span>Periodo de los cursos</span>
+        </div>
+        <div class="cert-summary-item">
+          <strong>Platzi</strong>
+          <span>Entidad emisora</span>
+        </div>
+      </div>
+
+      <div class="cert-grid">
+        <% site.certifications.forEach((certification) => { %>
+          <article class="cert-card">
+            <div class="cert-card-top">
+              <span class="cert-badge <%= certification.status === 'Completada' ? 'cert-badge-active' : 'cert-badge-progress' %>">
+                <%= certification.status %>
+              </span>
+              <% if (certification.date) { %>
+                <time class="cert-year" datetime="<%= certification.date %>"><%= certification.date.slice(0, 4) %></time>
+              <% } %>
+            </div>
+            <h3><%= certification.name %></h3>
+            <p class="cert-issuer"><%= certification.issuer %></p>
+            <p><%= certification.focus %></p>
+
+            <dl class="cert-meta">
+              <% if (certification.dateLabel) { %>
+                <div>
+                  <dt>Fecha</dt>
+                  <dd><%= certification.dateLabel %></dd>
+                </div>
+              <% } %>
+              <% if (certification.hours) { %>
+                <div>
+                  <dt>Duración</dt>
+                  <dd><%= certification.hours %> horas</dd>
+                </div>
+              <% } %>
+            </dl>
+
+            <% if (certification.credentialId) { %>
+              <p class="cert-id">
+                <span>Código</span>
+                <code><%= certification.credentialId %></code>
+              </p>
+            <% } %>
+
+            <div class="cert-actions">
+              <% if (certification.file) { %>
+                <a class="text-link" href="<%= certification.file %>" target="_blank" rel="noopener noreferrer">
+                  Ver diploma <span class="arrow" aria-hidden="true">↗</span>
+                </a>
+              <% } %>
+              <% if (certification.credentialUrl) { %>
+                <a class="text-link" href="<%= certification.credentialUrl %>" target="_blank" rel="noopener noreferrer">
+                  Perfil de Platzi <span class="arrow" aria-hidden="true">↗</span>
+                </a>
+              <% } %>
+            </div>
+          </article>
+        <% }) %>
+      </div>
+
+      <p class="disclosure">
+        Los diplomas son los originales emitidos por Platzi. No se han modificado
+        los datos ni las fechas de aprobación.
+      </p>
+    <% } else { %>
+      <div class="empty-card">
+        <span class="empty-icon" aria-hidden="true">+</span>
+        <div>
+          <h2>Aún no hay certificaciones publicadas</h2>
+          <p>
+            No quiero llenar esta sección con metas que todavía no he alcanzado.
+            Ahora mismo estoy construyendo la base con práctica y documentación.
+            Cuando complete una certificación, aparecerá aquí con sus datos
+            verificables.
+          </p>
+          <div class="empty-actions">
+            <a class="btn btn-primary" href="/practicas">Ver áreas de práctica</a>
+            <a class="btn btn-secondary" href="/laboratorios">Ver laboratorios</a>
+          </div>
+        </div>
+      </div>
+    <% } %>
+  </div>
+</section>
+
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-head">
+      <p class="section-kicker">Ruta de aprendizaje</p>
+      <h2>El plan que estoy siguiendo</h2>
+      <p class="section-sub">
+        Sin fechas inventadas. Estas son las etapas que quiero completar y los
+        temas que quiero entender antes de pasar a la siguiente.
+      </p>
+    </div>
+
+    <ol class="timeline">
+      <% site.learningPath.forEach((stage) => { %>
+        <li class="timeline-item">
+          <span class="timeline-year">Etapa <%= stage.stage %></span>
+          <div>
+            <h3><%= stage.title %></h3>
+            <p><%= stage.description %></p>
+            <ul class="chips">
+              <% stage.topics.forEach((topic) => { %>
+                <li class="chip"><%= topic %></li>
+              <% }) %>
+            </ul>
+          </div>
+        </li>
+      <% }) %>
+    </ol>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <p class="section-kicker">Progreso</p>
+      <h2>Cómo mido lo que aprendo</h2>
+      <p class="section-sub">
+        Sin métricas infladas. El progreso se ve en lo que puedo explicar y
+        reproducir.
+      </p>
+    </div>
+
+    <div class="value-grid">
+      <article class="value-card">
+        <span class="value-number" aria-hidden="true">01</span>
+        <h3>Laboratorios completados</h3>
+        <p>Cada ejercicio terminado se convierte en una entrada del portafolio.</p>
+      </article>
+      <article class="value-card">
+        <span class="value-number" aria-hidden="true">02</span>
+        <h3>Writeups publicados</h3>
+        <p>Si puedo explicar los pasos, puedo demostrar que lo he entendido.</p>
+      </article>
+      <article class="value-card">
+        <span class="value-number" aria-hidden="true">03</span>
+        <h3>Autoevaluación</h3>
+        <p>Anoto qué me costó, qué repasar y cuál es el siguiente paso.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/cta') %>

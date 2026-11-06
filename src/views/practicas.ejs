@@ -1,0 +1,119 @@
+<section class="page-hero">
+  <div class="container">
+    <p class="eyebrow">Áreas de práctica</p>
+    <h1>Lo que estoy aprendiendo, paso a paso.</h1>
+    <p class="lead">
+      Estas áreas no son servicios que ofrezco: son los temas que estudio y en los
+      que iré publicando ejercicios. El objetivo es construir una base sólida antes
+      de dar el siguiente paso.
+    </p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="/laboratorios">Ver laboratorios</a>
+      <a class="btn btn-secondary" href="/sobre-mi">Sobre mí</a>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="service-intro">
+      <p class="section-kicker">Mapa de práctica</p>
+      <h2>Entender antes de repetir</h2>
+      <p class="section-sub">
+        Cada área tiene unos temas concretos y una forma de documentar lo que
+        practico. Así puedo repasar y ver mi progreso sin inventar resultados.
+      </p>
+      <nav class="anchor-nav" aria-label="Áreas de práctica disponibles">
+        <% site.practiceAreas.forEach((area) => { %>
+          <a href="#<%= area.slug %>"><%= area.title %></a>
+        <% }) %>
+      </nav>
+    </div>
+
+    <div class="service-details">
+      <% site.practiceAreas.forEach((area) => { %>
+        <article class="service-detail" id="<%= area.slug %>">
+          <div class="service-detail-head">
+            <span class="service-index" aria-hidden="true"><%= area.index %></span>
+            <h2><%= area.title %></h2>
+            <p><%= area.summary %></p>
+          </div>
+          <div class="service-detail-body">
+            <p><%= area.description %></p>
+            <h3>Qué cubre</h3>
+            <ul class="chips">
+              <% area.topics.forEach((topic) => { %>
+                <li class="chip"><%= topic %></li>
+              <% }) %>
+            </ul>
+            <p class="ideal-for"><strong>Cómo lo documento:</strong> <%= area.evidence %></p>
+          </div>
+        </article>
+      <% }) %>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-head">
+      <p class="section-kicker">Método personal</p>
+      <h2>Cómo uso este portafolio</h2>
+      <p class="section-sub">
+        No es un escaparate de resultados inventados. Es un registro de trabajo en
+        progreso.
+      </p>
+    </div>
+
+    <div class="value-grid">
+      <article class="value-card">
+        <span class="value-number" aria-hidden="true">01</span>
+        <h3>Aprendo</h3>
+        <p>Estudio los fundamentos y anoto las dudas antes de pasar a la práctica.</p>
+      </article>
+      <article class="value-card">
+        <span class="value-number" aria-hidden="true">02</span>
+        <h3>Practico</h3>
+        <p>Resuelvo laboratorios en entornos autorizados y documento el proceso.</p>
+      </article>
+      <article class="value-card">
+        <span class="value-number" aria-hidden="true">03</span>
+        <h3>Documento</h3>
+        <p>Publico writeups con objetivo, pasos, evidencias y aprendizajes.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container faq-layout">
+    <div class="section-head">
+      <p class="section-kicker">Preguntas frecuentes</p>
+      <h2>Sobre este portafolio</h2>
+      <p class="section-sub">
+        Si tu duda no está aquí, escríbeme y la respondo cuando pueda.
+      </p>
+    </div>
+
+    <div class="faq-list">
+      <details class="faq-item">
+        <summary>¿Ofreces servicios de auditoría o pentesting?</summary>
+        <p>No. Estoy en formación y este portafolio documenta mi aprendizaje. No vendo servicios profesionales ni acepto encargos sobre sistemas de terceros.</p>
+      </details>
+      <details class="faq-item">
+        <summary>¿Puedo usar tus writeups?</summary>
+        <p>Puedes leerlos y usarlos como referencia para tu propio aprendizaje. No los presentes como tuyos: cita la fuente y respeta el trabajo original.</p>
+      </details>
+      <details class="faq-item">
+        <summary>¿Cómo sé que los ejercicios son éticos?</summary>
+        <p>Todos se realizan en máquinas propias o en plataformas que permiten la práctica. No publico datos sensibles ni pruebas sobre sistemas sin autorización.</p>
+      </details>
+      <details class="faq-item">
+        <summary>¿Puedo recomendarte un recurso o proponer una colaboración?</summary>
+        <p>Sí. Escríbeme por la página de contacto. Estoy abierto a feedback, recursos y prácticas conjuntas con otras personas que estén aprendiendo.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/cta') %>

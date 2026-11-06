@@ -1,0 +1,38 @@
+{
+  "name": "portafolio-ciberseguridad",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Portafolio de aprendizaje en ciberseguridad: prácticas, laboratorios y formación",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/orangge2004/portafolio-ciberseguridad.git"
+  },
+  "homepage": "https://github.com/orangge2004/portafolio-ciberseguridad#readme",
+  "bugs": {
+    "url": "https://github.com/orangge2004/portafolio-ciberseguridad/issues"
+  },
+  "type": "module",
+  "main": "dist/server.js",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc && node scripts/copy-views.mjs",
+    "start": "node dist/server.js",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "express-ejs-layouts": "^2.5.1"
+  },
+  "devDependencies": {
+    "@types/ejs": "^3.1.5",
+    "@types/express": "^5.0.3",
+    "@types/express-ejs-layouts": "^2.5.4",
+    "@types/node": "^24.0.0",
+    "tsx": "^4.20.0",
+    "typescript": "^5.9.0"
+  }
+}

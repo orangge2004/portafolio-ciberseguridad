@@ -1,0 +1,114 @@
+<section class="page-hero">
+  <div class="container">
+    <p class="eyebrow">Laboratorios</p>
+    <h1>Ejercicios prácticos y writeups.</h1>
+    <p class="lead">
+      Aquí publicaré los laboratorios que complete: objetivo, entorno, pasos y
+      aprendizajes. Ahora mismo no hay ninguno publicado.
+    </p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="/practicas">Ver áreas de práctica</a>
+      <a class="btn btn-secondary" href="/contacto">Sugerir un recurso</a>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <% if (site.projects.length > 0) { %>
+      <div class="projects-toolbar">
+        <div class="filter-group" role="group" aria-label="Filtrar laboratorios por categoría">
+          <button class="filter-button is-active" type="button" data-filter="all" aria-pressed="true">Todos</button>
+          <button class="filter-button" type="button" data-filter="web" aria-pressed="false">Web</button>
+          <button class="filter-button" type="button" data-filter="linux" aria-pressed="false">Linux</button>
+          <button class="filter-button" type="button" data-filter="windows" aria-pressed="false">Windows</button>
+          <button class="filter-button" type="button" data-filter="network" aria-pressed="false">Redes</button>
+          <button class="filter-button" type="button" data-filter="ctf" aria-pressed="false">CTF</button>
+        </div>
+        <p class="projects-count">
+          <%= site.projects.length %>
+          <%= site.projects.length === 1 ? 'laboratorio publicado' : 'laboratorios publicados' %>
+        </p>
+      </div>
+
+      <div class="project-grid project-grid-list">
+        <% site.projects.forEach((lab) => { %>
+          <%- include('partials/lab-card', { lab }) %>
+        <% }) %>
+      </div>
+
+      <p class="empty-state" data-empty hidden>No hay laboratorios en esta categoría.</p>
+
+      <p class="disclosure">
+        Todos los ejercicios se realizan en entornos propios o en plataformas que
+        permiten la práctica. No se publican datos sensibles ni información de
+        sistemas de terceros.
+      </p>
+    <% } else { %>
+      <div class="empty-card">
+        <span class="empty-icon" aria-hidden="true">+</span>
+        <div>
+          <h2>Todavía no hay laboratorios publicados</h2>
+          <p>
+            Esta sección está vacía a propósito. Estoy preparando los primeros
+            ejercicios y los añadiré aquí cuando los complete. Cada publicación
+            incluirá:
+          </p>
+          <ul class="check-list">
+            <li><span class="check" aria-hidden="true"></span>El objetivo del laboratorio y el entorno utilizado.</li>
+            <li><span class="check" aria-hidden="true"></span>Los pasos seguidos, con las dificultades encontradas.</li>
+            <li><span class="check" aria-hidden="true"></span>Los hallazgos y las lecciones aprendidas.</li>
+            <li><span class="check" aria-hidden="true"></span>Las herramientas y referencias para repasar.</li>
+          </ul>
+          <div class="empty-actions">
+            <a class="btn btn-primary" href="/practicas">Ver áreas de práctica</a>
+            <a class="btn btn-secondary" href="/contacto">Contactar</a>
+          </div>
+        </div>
+      </div>
+    <% } %>
+  </div>
+</section>
+
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-head">
+      <p class="section-kicker">Formato</p>
+      <h2>Qué encontrarás en cada writeup</h2>
+      <p class="section-sub">
+        Un ejercicio sin contexto no sirve para aprender. Por eso cada publicación
+        seguirá esta estructura.
+      </p>
+    </div>
+
+    <div class="value-grid value-grid-four">
+      <article class="value-card">
+        <span class="value-number" aria-hidden="true">01</span>
+        <h3>Objetivo</h3>
+        <p>Qué quería practicar y por qué elegí ese ejercicio.</p>
+      </article>
+      <article class="value-card">
+        <span class="value-number" aria-hidden="true">02</span>
+        <h3>Entorno</h3>
+        <p>Máquina, plataforma o aplicación vulnerable utilizada, siempre autorizada.</p>
+      </article>
+      <article class="value-card">
+        <span class="value-number" aria-hidden="true">03</span>
+        <h3>Pasos</h3>
+        <p>El proceso seguido, incluyendo los callejones sin salida.</p>
+      </article>
+      <article class="value-card">
+        <span class="value-number" aria-hidden="true">04</span>
+        <h3>Aprendizajes</h3>
+        <p>Qué he entendido y qué haría distinto la próxima vez.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<p class="container disclosure">
+  Este portafolio no ofrece servicios profesionales. Solo documenta práctica
+  personal en entornos controlados.
+</p>
+
+<%- include('partials/cta') %>

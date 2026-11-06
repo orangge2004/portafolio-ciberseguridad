@@ -1,0 +1,208 @@
+<section class="hero">
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <p class="eyebrow">Portafolio de aprendizaje · Ciberseguridad</p>
+      <h1>Aprendiendo seguridad, un laboratorio a la vez.</h1>
+      <p class="hero-lead">
+        Documento mi progreso en hacking ético y seguridad ofensiva: fundamentos,
+        ejercicios prácticos y análisis de vulnerabilidades en entornos autorizados.
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="/practicas">Ver áreas de práctica</a>
+        <a class="btn btn-secondary" href="/laboratorios">Laboratorios</a>
+      </div>
+      <p class="hero-note">
+        <span class="status-dot" aria-hidden="true"></span>
+        Portafolio en construcción · Se actualiza a medida que avanzo
+      </p>
+    </div>
+
+    <aside class="hero-panel" aria-labelledby="compromiso-title">
+      <div class="panel-head">
+        <h2 id="compromiso-title">Cómo documento cada ejercicio</h2>
+        <span class="panel-tag">Método</span>
+      </div>
+      <ul class="panel-list">
+        <li><span class="check" aria-hidden="true"></span>Objetivo y entorno autorizado.</li>
+        <li><span class="check" aria-hidden="true"></span>Pasos reproducibles y comandos utilizados.</li>
+        <li><span class="check" aria-hidden="true"></span>Herramientas y evidencias del proceso.</li>
+        <li><span class="check" aria-hidden="true"></span>Hallazgos, dificultades y aprendizajes.</li>
+        <li><span class="check" aria-hidden="true"></span>Referencias para repasar y seguir practicando.</li>
+      </ul>
+      <p class="panel-foot">Solo entornos propios o plataformas con autorización. Sin datos de clientes.</p>
+    </aside>
+  </div>
+</section>
+
+<section class="stats" aria-label="Áreas de aprendizaje actuales">
+  <div class="container stats-grid">
+    <% site.focus.forEach((item) => { %>
+      <div class="stat">
+        <strong><%= item.title %></strong>
+        <span><%= item.description %></span>
+      </div>
+    <% }) %>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <p class="section-kicker">Áreas de práctica</p>
+      <h2>Qué estoy aprendiendo</h2>
+      <p class="section-sub">
+        Estas son las áreas que forman mi ruta de aprendizaje. No son servicios
+        profesionales: es el mapa de lo que practico y documento.
+      </p>
+    </div>
+
+    <div class="card-grid">
+      <% site.practiceAreas.forEach((area) => { %>
+        <article class="service-card">
+          <span class="service-index" aria-hidden="true"><%= area.index %></span>
+          <h3><%= area.title %></h3>
+          <p><%= area.summary %></p>
+          <a class="text-link" href="/practicas#<%= area.slug %>">Ver área <span class="arrow" aria-hidden="true">→</span></a>
+        </article>
+      <% }) %>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-head">
+      <p class="section-kicker">Método</p>
+      <h2>De la práctica al writeup</h2>
+      <p class="section-sub">
+        Cada laboratorio sigue el mismo proceso. Así puedo repasar lo aprendido y
+        otra persona puede entender lo que hice sin adivinar.
+      </p>
+    </div>
+
+    <ol class="steps">
+      <li class="step">
+        <h3>Entorno autorizado</h3>
+        <p>Practico en máquinas propias o plataformas que permiten laboratorios.</p>
+      </li>
+      <li class="step">
+        <h3>Objetivo claro</h3>
+        <p>Defino qué quiero practicar antes de empezar y qué evidencia quiero obtener.</p>
+      </li>
+      <li class="step">
+        <h3>Práctica y evidencias</h3>
+        <p>Anoto comandos, resultados y decisiones mientras resuelvo el ejercicio.</p>
+      </li>
+      <li class="step">
+        <h3>Writeup y aprendizajes</h3>
+        <p>Convierto el proceso en un resumen reproducible y anoto qué haría distinto.</p>
+      </li>
+    </ol>
+
+    <div class="value-grid">
+      <div class="value-item">
+        <h3>Reproducible</h3>
+        <p>Si no puedo explicar los pasos, no lo publico.</p>
+      </div>
+      <div class="value-item">
+        <h3>Ético</h3>
+        <p>Solo entornos propios o plataformas con autorización explícita.</p>
+      </div>
+      <div class="value-item">
+        <h3>Honesto</h3>
+        <p>Documento lo que he hecho y también lo que todavía no sé.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-head section-head-split">
+      <div>
+        <p class="section-kicker">Laboratorios</p>
+        <h2>Ejercicios prácticos</h2>
+        <p class="section-sub">
+          Aquí iré publicando los writeups de los laboratorios que complete.
+          Todavía no hay ninguno publicado.
+        </p>
+      </div>
+      <a class="btn btn-secondary" href="/laboratorios">Ver sección</a>
+    </div>
+
+    <% const featuredLabs = site.projects.filter((lab) => lab.featured); %>
+    <% const homeLabs = featuredLabs.length > 0 ? featuredLabs : site.projects.slice(0, 2); %>
+    <% if (homeLabs.length > 0) { %>
+      <div class="project-grid">
+        <% homeLabs.forEach((lab) => { %>
+          <%- include('partials/lab-card', { lab }) %>
+        <% }) %>
+      </div>
+    <% } else { %>
+      <div class="empty-card">
+        <span class="empty-icon" aria-hidden="true">+</span>
+        <div>
+          <h3>El primer laboratorio está en preparación</h3>
+          <p>
+            Esta sección está vacía a propósito. A medida que complete ejercicios,
+            añadiré el objetivo, el entorno, los pasos y los aprendizajes de cada uno.
+          </p>
+          <div class="empty-actions">
+            <a class="btn btn-primary" href="/practicas">Ver áreas de práctica</a>
+            <a class="btn btn-secondary" href="/contacto">Sugerir un recurso</a>
+          </div>
+        </div>
+      </div>
+    <% } %>
+  </div>
+</section>
+
+<section class="section section-alt">
+  <% const completedCerts = site.certifications.filter((c) => c.status === 'Completada'); %>
+  <div class="container cert-strip">
+    <div class="cert-strip-copy">
+      <p class="section-kicker">Formación</p>
+      <% if (completedCerts.length > 0) { %>
+        <h2>
+          <%= completedCerts.length %>
+          <%= completedCerts.length === 1 ? 'certificación completada' : 'certificaciones completadas' %>
+        </h2>
+        <p class="section-sub">
+          Cursos terminados en Platzi, con diploma y fecha de aprobación. La ruta de
+          aprendizaje sigue abierta con los próximos temas que quiero practicar.
+        </p>
+        <a class="text-link" href="/formacion">Ver mi formación <span class="arrow" aria-hidden="true">→</span></a>
+      <% } else { %>
+        <h2>Un paso cada vez</h2>
+        <p class="section-sub">
+          Sin fechas ni certificaciones inventadas. Este es el plan que estoy
+          siguiendo y que iré actualizando con lo que complete.
+        </p>
+        <a class="text-link" href="/formacion">Ver mi formación <span class="arrow" aria-hidden="true">→</span></a>
+      <% } %>
+    </div>
+    <div class="cert-strip-list">
+      <% if (completedCerts.length > 0) { %>
+        <% completedCerts.forEach((certification) => { %>
+          <div class="cert-strip-item">
+            <strong><%= certification.name %></strong>
+            <span>
+              <%= certification.issuer %>
+              <% if (certification.dateLabel) { %>· <%= certification.dateLabel %><% } %>
+              <% if (certification.hours) { %>· <%= certification.hours %> h<% } %>
+            </span>
+          </div>
+        <% }) %>
+      <% } else { %>
+        <% site.learningPath.forEach((stage) => { %>
+          <div class="cert-strip-item">
+            <strong>Etapa <%= stage.stage %> · <%= stage.title %></strong>
+            <span><%= stage.description %></span>
+          </div>
+        <% }) %>
+      <% } %>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/cta') %>

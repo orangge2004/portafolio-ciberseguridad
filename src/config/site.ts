@@ -1,0 +1,269 @@
+import { existsSync, readFileSync } from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+export interface NavItem {
+  label: string;
+  href: string;
+}
+
+export interface SocialLink {
+  label: string;
+  href: string;
+}
+
+export interface FocusArea {
+  title: string;
+  description: string;
+}
+
+export interface PracticeArea {
+  slug: string;
+  index: string;
+  title: string;
+  summary: string;
+  description: string;
+  topics: string[];
+  evidence: string;
+}
+
+export type LabFilter = 'web' | 'linux' | 'windows' | 'network' | 'ctf';
+
+export interface Lab {
+  slug: string;
+  title: string;
+  platform: string;
+  difficulty: string;
+  date: string;
+  category: string;
+  filter: LabFilter;
+  summary: string;
+  objective: string;
+  environment: string[];
+  steps: string[];
+  findings: string[];
+  lessons: string[];
+  tools: string[];
+  featured: boolean;
+}
+
+export interface Certification {
+  name: string;
+  issuer: string;
+  status: 'Completada' | 'En curso';
+  focus: string;
+  /** Fecha ISO de aprobación, por ejemplo '2026-01-20'. */
+  date?: string;
+  /** Fecha ya formateada para mostrarla en la web. */
+  dateLabel?: string;
+  /** Duración del curso en horas, según el diploma. */
+  hours?: number;
+  /** Código de la certificación que aparece en el diploma. */
+  credentialId?: string;
+  /** Enlace público para verificar la credencial. */
+  credentialUrl?: string;
+  /** Ruta del diploma en PDF dentro de public/. */
+  file?: string;
+}
+
+export interface LearningStage {
+  stage: string;
+  title: string;
+  description: string;
+  topics: string[];
+}
+
+const baseSite = {
+  // Placeholders públicos. Tus datos reales van en site.local.json (ignorado por Git).
+  name: 'Tu Nombre',
+  initials: 'TN',
+  role: 'Ciberseguridad en formación',
+  tagline:
+    'Portafolio de aprendizaje sobre hacking ético, laboratorios y seguridad ofensiva.',
+  email: 'tu@email.com',
+  location: 'Tu ciudad · Remoto',
+  availability: 'Portafolio en construcción',
+  responseTime: 'Te responderé lo antes posible.',
+
+  nav: [
+    { label: 'Inicio', href: '/' },
+    { label: 'Sobre mí', href: '/sobre-mi' },
+    { label: 'Práctica', href: '/practicas' },
+    { label: 'Laboratorios', href: '/laboratorios' },
+    { label: 'Formación', href: '/formacion' },
+    { label: 'Contacto', href: '/contacto' },
+  ] satisfies NavItem[],
+
+  // Añade tus perfiles cuando los tengas. Si la lista está vacía, no se muestra.
+  // Ejemplo:
+  // { label: 'GitHub', href: 'https://github.com/tu-usuario' },
+  socials: [] as SocialLink[],
+
+  focus: [
+    {
+      title: 'Redes',
+      description: 'Entender cómo se comunican los sistemas y dónde aparecen los fallos.',
+    },
+    {
+      title: 'Linux',
+      description: 'Mi entorno de trabajo para laboratorios y práctica diaria.',
+    },
+    {
+      title: 'Web',
+      description: 'OWASP Top 10, autenticación y control de acceso.',
+    },
+    {
+      title: 'Reporte',
+      description: 'Documentar cada ejercicio con pasos, evidencias y aprendizajes.',
+    },
+  ] satisfies FocusArea[],
+
+  practiceAreas: [
+    {
+      slug: 'fundamentos-redes',
+      index: '01',
+      title: 'Fundamentos y redes',
+      summary:
+        'La base para entender cómo se comunican los sistemas y qué superficie de ataque existe.',
+      description:
+        'Antes de buscar vulnerabilidades hay que entender el entorno. Esta área recoge ejercicios y notas sobre direccionamiento, puertos, DNS, HTTP y el recorrido de una petición entre cliente y servidor.',
+      topics: ['Modelo TCP/IP', 'Puertos y servicios', 'DNS', 'HTTP y HTTPS'],
+      evidence:
+        'Mapas de red, capturas comentadas y notas de laboratorio explicando qué ocurre en cada paso.',
+    },
+    {
+      slug: 'linux-sistemas',
+      index: '02',
+      title: 'Linux y sistemas',
+      summary:
+        'El sistema operativo donde se ejecutan la mayoría de laboratorios y herramientas.',
+      description:
+        'Practico navegación por el sistema de archivos, permisos, procesos, servicios y gestión de usuarios. El objetivo es moverme con soltura en la terminal y entender qué configuración puede abrir una puerta.',
+      topics: ['Comandos esenciales', 'Permisos y usuarios', 'Procesos y servicios', 'Búsqueda y filtrado'],
+      evidence:
+        'Notas de laboratorio con comandos utilizados, resultados y explicación de por qué funcionan.',
+    },
+    {
+      slug: 'seguridad-web',
+      index: '03',
+      title: 'Seguridad web',
+      summary:
+        'Vulnerabilidades comunes en aplicaciones web y cómo identificarlas de forma manual.',
+      description:
+        'Estudio el OWASP Top 10 y practico con aplicaciones deliberadamente vulnerables. Me interesa entender la causa de cada fallo, no solo ejecutar una herramienta: autenticación, control de acceso, validación de entrada y lógica de negocio.',
+      topics: ['OWASP Top 10', 'Autenticación', 'Control de acceso', 'Validación de entrada'],
+      evidence:
+        'Writeups de laboratorios web con peticiones, respuestas y explicación del impacto.',
+    },
+    {
+      slug: 'reconocimiento',
+      index: '04',
+      title: 'Reconocimiento y enumeración',
+      summary:
+        'Aprender a observar antes de actuar y a delimitar qué servicios están expuestos.',
+      description:
+        'Trabajo técnicas de reconocimiento pasivo y activo únicamente sobre entornos propios o plataformas que permiten la práctica. El foco está en interpretar la información, priorizar objetivos y documentar el alcance.',
+      topics: ['OSINT básico', 'Enumeración de servicios', 'Análisis de versiones', 'Documentación del alcance'],
+      evidence:
+        'Checklists de reconocimiento y notas con los servicios encontrados y su relevancia.',
+    },
+    {
+      slug: 'explotacion-laboratorios',
+      index: '05',
+      title: 'Explotación en laboratorios',
+      summary:
+        'Práctica controlada de vulnerabilidades conocidas y escalada de privilegios.',
+      description:
+        'Resuelvo máquinas y retos en entornos autorizados para entender el ciclo completo: acceso inicial, enumeración, escalada y limpieza. Cada ejercicio se documenta con contexto y sin publicar datos sensibles.',
+      topics: ['Acceso inicial', 'Escalada de privilegios', 'Movimiento controlado', 'Buenas prácticas'],
+      evidence:
+        'Writeups paso a paso, con lecciones aprendidas y referencias para repasar.',
+    },
+    {
+      slug: 'documentacion',
+      index: '06',
+      title: 'Documentación y reporte',
+      summary:
+        'Convertir la práctica en evidencia clara, reproducible y útil para otra persona.',
+      description:
+        'Un ejercicio sin documentación se olvida. Practico la redacción de objetivos, pasos, evidencias, impacto y recomendaciones, cuidando no revelar información sensible de los entornos donde practico.',
+      topics: ['Estructura de un writeup', 'Evidencias', 'Impacto y riesgo', 'Recomendaciones'],
+      evidence:
+        'Informes de práctica y writeups publicados en este portafolio.',
+    },
+  ] satisfies PracticeArea[],
+
+  // EMPIEZA VACÍO A PROPÓSITO: añade aquí tus laboratorios cuando los completes.
+  // Ejemplo de estructura:
+  // {
+  //   slug: 'mi-primer-laboratorio',
+  //   title: 'Nombre del laboratorio',
+  //   platform: 'Laboratorio propio',
+  //   difficulty: 'Principiante',
+  //   date: '2026-11',
+  //   category: 'Web',
+  //   filter: 'web',
+  //   summary: 'Resumen de una o dos frases.',
+  //   objective: 'Qué querías practicar o demostrar.',
+  //   environment: ['Máquina virtual local', 'Aplicación vulnerable propia'],
+  //   steps: ['Paso 1...', 'Paso 2...', 'Paso 3...'],
+  //   findings: ['Hallazgo o aprendizaje técnico...'],
+  //   lessons: ['Qué harías distinto la próxima vez...'],
+  //   tools: ['Navegador', 'Terminal'],
+  //   featured: true,
+  // },
+  projects: [] as Lab[],
+
+  // Las certificaciones personales van en site.local.json (ignorado por Git).
+  // El repositorio público se queda con el estado vacío.
+  certifications: [] as Certification[],
+
+  learningPath: [
+    {
+      stage: '01',
+      title: 'Fundamentos',
+      description: 'Redes, sistemas operativos, Linux y HTTP.',
+      topics: ['TCP/IP', 'Linux', 'DNS', 'HTTP'],
+    },
+    {
+      stage: '02',
+      title: 'Seguridad web',
+      description: 'Vulnerabilidades comunes y pruebas manuales en entornos de práctica.',
+      topics: ['OWASP Top 10', 'Autenticación', 'Control de acceso'],
+    },
+    {
+      stage: '03',
+      title: 'Pentesting',
+      description: 'Reconocimiento, enumeración y explotación controlada en laboratorios.',
+      topics: ['Enumeración', 'Explotación', 'Escalada de privilegios'],
+    },
+    {
+      stage: '04',
+      title: 'Documentación',
+      description: 'Convertir cada ejercicio en un writeup claro y reproducible.',
+      topics: ['Evidencias', 'Impacto', 'Recomendaciones'],
+    },
+  ] satisfies LearningStage[],
+};
+
+export type Site = typeof baseSite;
+
+function loadLocalSite(): Partial<Site> {
+  const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
+  const localPath = path.join(projectRoot, 'site.local.json');
+
+  if (!existsSync(localPath)) {
+    return {};
+  }
+
+  try {
+    return JSON.parse(readFileSync(localPath, 'utf8')) as Partial<Site>;
+  } catch (error) {
+    console.warn(
+      `No se pudo leer site.local.json: ${error instanceof Error ? error.message : String(error)}`,
+    );
+    return {};
+  }
+}
+
+export const site: Site = { ...baseSite, ...loadLocalSite() };

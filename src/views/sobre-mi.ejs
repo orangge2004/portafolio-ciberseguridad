@@ -1,0 +1,162 @@
+<section class="page-hero">
+  <div class="container">
+    <p class="eyebrow">Sobre mí</p>
+    <h1>Aprendiendo hacking ético con método.</h1>
+    <p class="lead">
+      Estoy empezando en ciberseguridad y este portafolio es mi cuaderno de campo:
+      lo que practico, cómo lo hago y qué aprendo en cada ejercicio.
+    </p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container about-grid">
+    <div class="prose">
+      <p>
+        No tengo años de experiencia ni una lista de clientes. Tengo curiosidad,
+        tiempo de práctica y la intención de documentar cada paso para no olvidar
+        lo aprendido.
+      </p>
+      <p>
+        Mi punto de partida son los fundamentos: redes, Linux y HTTP. A partir de
+        ahí avanzo hacia seguridad web, reconocimiento y explotación en
+        laboratorios autorizados. Todo lo que publico aquí sale de entornos
+        propios o de plataformas que permiten la práctica.
+      </p>
+      <p>
+        Este sitio no pretende vender servicios profesionales. Su función es
+        mostrar evidencia de mi progreso y darme un lugar donde ordenar writeups,
+        notas y recursos. Si algo no lo sé, lo digo; si un ejercicio me cuesta, lo
+        anoto. La seguridad también se aprende reconociendo los límites.
+      </p>
+      <p>
+        Estoy abierto a feedback, recomendaciones de recursos y colaboraciones con
+        otras personas que estén aprendiendo o que quieran compartir su experiencia.
+      </p>
+    </div>
+
+    <aside class="fact-card" aria-labelledby="ficha-title">
+      <h2 id="ficha-title">Ficha rápida</h2>
+      <dl class="fact-list">
+        <div>
+          <dt>Rol</dt>
+          <dd>Estudiante de ciberseguridad</dd>
+        </div>
+        <div>
+          <dt>Enfoque</dt>
+          <dd>Seguridad ofensiva (en formación)</dd>
+        </div>
+        <div>
+          <dt>Formación</dt>
+          <dd>
+            <%= site.certifications.filter((c) => c.status === 'Completada').length %> certificaciones · Platzi
+            <a class="text-link" href="/formacion">Ver</a>
+          </dd>
+        </div>
+        <div>
+          <dt>Ubicación</dt>
+          <dd><%= site.location %></dd>
+        </div>
+        <div>
+          <dt>Estado</dt>
+          <dd><span class="status-dot" aria-hidden="true"></span><%= site.availability %></dd>
+        </div>
+        <div>
+          <dt>Email</dt>
+          <dd><a href="mailto:<%= site.email %>"><%= site.email %></a></dd>
+        </div>
+      </dl>
+      <a class="btn btn-primary btn-block" href="/contacto">Enviar un mensaje</a>
+    </aside>
+  </div>
+</section>
+
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-head">
+      <p class="section-kicker">Cómo trabajo</p>
+      <h2>Principios que aplico desde el primer día</h2>
+      <p class="section-sub">
+        No hacen falta años de experiencia para trabajar con cuidado. Estos son los
+        criterios que sigo en cada práctica.
+      </p>
+    </div>
+
+    <div class="value-grid value-grid-four">
+      <article class="value-card">
+        <span class="value-number" aria-hidden="true">01</span>
+        <h3>Curiosidad</h3>
+        <p>Preguntar por qué funciona algo antes de buscar cómo romperlo.</p>
+      </article>
+      <article class="value-card">
+        <span class="value-number" aria-hidden="true">02</span>
+        <h3>Rigor</h3>
+        <p>Comprobar los pasos y no publicar conclusiones sin evidencia.</p>
+      </article>
+      <article class="value-card">
+        <span class="value-number" aria-hidden="true">03</span>
+        <h3>Ética</h3>
+        <p>Practicar solo en entornos propios o con autorización explícita.</p>
+      </article>
+      <article class="value-card">
+        <span class="value-number" aria-hidden="true">04</span>
+        <h3>Claridad</h3>
+        <p>Escribir para que otra persona pueda entender y reproducir el ejercicio.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="ethics-band">
+      <div>
+        <p class="section-kicker">Reglas de práctica</p>
+        <h2>Antes de tocar un sistema, compruebo que puedo hacerlo</h2>
+        <p>
+          Aunque esté aprendiendo, el respeto por los sistemas ajenos no es
+          opcional. Antes de cualquier ejercicio verifico el permiso, el alcance y
+          el tratamiento de la información.
+        </p>
+      </div>
+      <ul class="check-list">
+        <li><span class="check" aria-hidden="true"></span>Solo práctico en máquinas propias o plataformas que lo permiten.</li>
+        <li><span class="check" aria-hidden="true"></span>No pruebo nada sobre sistemas de terceros sin autorización escrita.</li>
+        <li><span class="check" aria-hidden="true"></span>Anonimizo datos y evito publicar información sensible.</li>
+        <li><span class="check" aria-hidden="true"></span>Si encuentro algo crítico, lo comunico por el canal adecuado.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-head">
+      <p class="section-kicker">Ruta de aprendizaje</p>
+      <h2>Las etapas que quiero completar</h2>
+      <p class="section-sub">
+        Sin fechas que no puedo cumplir. Esta es la dirección, no un currículum
+        inventado.
+      </p>
+    </div>
+
+    <ol class="timeline">
+      <% site.learningPath.forEach((stage) => { %>
+        <li class="timeline-item">
+          <span class="timeline-year">Etapa <%= stage.stage %></span>
+          <div>
+            <h3><%= stage.title %></h3>
+            <p><%= stage.description %></p>
+            <ul class="chips">
+              <% stage.topics.forEach((topic) => { %>
+                <li class="chip"><%= topic %></li>
+              <% }) %>
+            </ul>
+          </div>
+        </li>
+      <% }) %>
+    </ol>
+  </div>
+</section>
+
+<%- include('partials/cta') %>

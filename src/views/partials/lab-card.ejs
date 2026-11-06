@@ -1,0 +1,15 @@
+<article class="project-card" data-category="<%= lab.filter %>">
+  <div class="project-meta">
+    <span class="chip"><%= lab.category %></span>
+    <span class="project-year"><%= lab.date %></span>
+  </div>
+  <h3>
+    <a href="/laboratorios/<%= lab.slug %>"><%= lab.title %></a>
+  </h3>
+  <p><%= lab.summary %></p>
+  <div class="project-tags">
+    <span><%= lab.platform %></span>
+    <span><%= lab.difficulty %></span>
+  </div>
+  <span class="project-link" aria-hidden="true">Ver writeup <span class="arrow">→</span></span>
+</article>
