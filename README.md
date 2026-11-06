@@ -62,7 +62,13 @@ El repositorio público incluye **placeholders** y no contiene datos personales.
 Para empezar, copia el ejemplo y edítalo:
 
 ```bash
+# macOS, Linux o Git Bash
 cp site.local.example.json site.local.json
+```
+
+```powershell
+# Windows PowerShell
+Copy-Item site.local.example.json site.local.json
 ```
 
 ```json
