@@ -1463,12 +1463,16 @@ a:hover .arrow {
 }
 
 .service-detail-body h3 {
-  margin: 1.6rem 0 0;
+  margin: 1.5rem 0 0;
   font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--muted-light);
+}
+
+.service-detail-body .chips {
+  margin-top: 1.5rem;
 }
 
 .ideal-for {
