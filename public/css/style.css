@@ -1,6 +1,5 @@
 /* ==========================================================================
    Portafolio de ciberseguridad — hoja de estilos principal
-   Diseño corporativo sobrio, sin dependencias externas.
    ========================================================================== */
 
 :root {
@@ -1475,7 +1474,7 @@ a:hover .arrow {
   margin-top: 1.5rem;
 }
 
-.ideal-for {
+.service-detail-body .ideal-for {
   margin: 1.5rem 0 0;
   padding: 0.8rem 1rem;
   border-left: 2px solid var(--accent);
