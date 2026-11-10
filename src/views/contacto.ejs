@@ -1,124 +1,66 @@
-<section class="page-hero">
-  <div class="container">
-    <p class="eyebrow">Contacto</p>
-    <h1>Hablemos.</h1>
-    <p class="lead">
-      Si quieres darme feedback sobre un ejercicio, proponer una colaboración o
-      compartir un recurso, escríbeme. Estoy aprendiendo y cualquier comentario
-      ayuda.
-    </p>
-  </div>
-</section>
+<%- include('partials/page-hero', {
+  eyebrow: 'Contacto',
+  heading: 'Hablemos',
+  lead: 'Si quieres darme feedback sobre un ejercicio, proponer una colaboración o compartir un recurso, escríbeme. Estoy aprendiendo y cualquier comentario ayuda.',
+}) %>
 
 <section class="section">
-  <div class="container contact-grid">
-    <div class="contact-info">
-      <div class="contact-block">
-        <h2>Canales directos</h2>
-        <ul class="contact-list">
-          <li>
-            <span class="contact-label">Email</span>
-            <a href="mailto:<%= site.email %>"><%= site.email %></a>
-          </li>
-          <li>
-            <span class="contact-label">Ubicación</span>
-            <span><%= site.location %></span>
-          </li>
-          <li>
-            <span class="contact-label">Estado</span>
-            <span><span class="status-dot" aria-hidden="true"></span><%= site.availability %></span>
-          </li>
-          <li>
-            <span class="contact-label">Tiempo de respuesta</span>
-            <span><%= site.responseTime %></span>
-          </li>
-        </ul>
-      </div>
+  <div class="container split">
+    <div class="stack">
+      <a class="link" href="mailto:<%= site.email %>"><%= site.email %> <span class="arrow" aria-hidden="true">↗</span></a>
+      <dl class="fact-list">
+        <div><dt>Ubicación</dt><dd><%= site.location %></dd></div>
+        <div><dt>Estado</dt><dd><%= site.availability %></dd></div>
+        <div><dt>Respuesta</dt><dd><%= site.responseTime %></dd></div>
+        <% site.socials.forEach((social) => { %>
+          <div><dt><%= social.label %></dt><dd><a href="<%= social.href %>" target="_blank" rel="noopener noreferrer"><%= social.href.replace(/^https?:\/\//, '') %> ↗</a></dd></div>
+        <% }) %>
+      </dl>
 
-      <% if (site.socials.length > 0) { %>
-        <div class="contact-block">
-          <h2>Perfiles</h2>
-          <ul class="contact-socials">
-            <% site.socials.forEach((social) => { %>
-              <li>
-                <a href="<%= social.href %>" target="_blank" rel="noopener noreferrer">
-                  <%= social.label %><span class="arrow" aria-hidden="true">↗</span>
-                </a>
-              </li>
-            <% }) %>
-          </ul>
-        </div>
-      <% } %>
+      <h2 class="h3 mt-7">Puedes escribirme para</h2>
+      <ul class="check-list">
+        <li>Darme feedback sobre un writeup o una nota.</li>
+        <li>Recomendarme un recurso, laboratorio o lectura.</li>
+        <li>Proponer una práctica o colaboración.</li>
+        <li>Compartir una oportunidad de aprendizaje.</li>
+      </ul>
 
-      <div class="contact-block">
-        <h2>Transparencia</h2>
-        <p>
-          No ofrezco servicios profesionales de auditoría ni pentesting. Este
-          portafolio documenta mi aprendizaje y mis prácticas en entornos
-          autorizados.
-        </p>
-      </div>
-
-      <div class="contact-block contact-checklist">
-        <h2>Puedes escribirme para</h2>
-        <ul class="check-list">
-          <li><span class="check" aria-hidden="true"></span>Darme feedback sobre un writeup o una nota.</li>
-          <li><span class="check" aria-hidden="true"></span>Recomendarme un recurso, laboratorio o lectura.</li>
-          <li><span class="check" aria-hidden="true"></span>Proponer una práctica o colaboración.</li>
-          <li><span class="check" aria-hidden="true"></span>Compartir una oportunidad de aprendizaje.</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="form-card">
-      <h2>Enviar un mensaje</h2>
-      <p class="form-intro">
-        Este formulario no envía datos a ningún servidor: prepara un mensaje en tu
-        cliente de correo para que tú decidas cuándo enviarlo.
+      <p class="disclosure">
+        Transparencia: no ofrezco servicios profesionales de auditoría ni
+        pentesting. Este portafolio documenta mi aprendizaje y mis prácticas en
+        entornos autorizados.
       </p>
-
-      <form id="contact-form" data-email="<%= site.email %>">
-        <div class="form-row">
-          <div class="field">
-            <label for="name">Nombre <span aria-hidden="true">*</span></label>
-            <input id="name" name="name" type="text" autocomplete="name" required>
-          </div>
-          <div class="field">
-            <label for="email">Email <span aria-hidden="true">*</span></label>
-            <input id="email" name="email" type="email" autocomplete="email" required>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="field">
-            <label for="company">Empresa u organización</label>
-            <input id="company" name="company" type="text" autocomplete="organization">
-          </div>
-          <div class="field">
-            <label for="service">Motivo <span aria-hidden="true">*</span></label>
-            <select id="service" name="service" required>
-              <option value="">Selecciona una opción</option>
-              <option value="Feedback sobre un laboratorio">Feedback sobre un laboratorio</option>
-              <option value="Recomendación de un recurso">Recomendación de un recurso</option>
-              <option value="Colaboración o práctica conjunta">Colaboración o práctica conjunta</option>
-              <option value="Oportunidad de aprendizaje">Oportunidad de aprendizaje</option>
-              <option value="Otra consulta">Otra consulta</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="field">
-          <label for="message">Mensaje <span aria-hidden="true">*</span></label>
-          <textarea id="message" name="message" rows="6" required placeholder="Cuéntame brevemente el motivo de tu mensaje."></textarea>
-        </div>
-
-        <button class="btn btn-primary btn-block" type="submit">Preparar mensaje</button>
-        <p class="form-note">
-          También puedes escribir directamente a
-          <a href="mailto:<%= site.email %>"><%= site.email %></a>.
-        </p>
-        <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
-      </form>
     </div>
+
+    <form class="form card" id="contact-form" data-email="<%= site.email %>" novalidate>
+      <div>
+        <h2 class="h3">Enviar un mensaje</h2>
+        <p class="form__note mt-4">
+          Este formulario no envía datos a ningún servidor: prepara el mensaje en
+          tu cliente de correo para que tú decidas cuándo enviarlo.
+        </p>
+      </div>
+
+      <fieldset class="field chips-field">
+        <legend class="field__label">Motivo *</legend>
+        <div class="chips mt-4">
+          <% ['Feedback sobre un laboratorio', 'Recomendación de un recurso', 'Colaboración o práctica conjunta', 'Oportunidad de aprendizaje', 'Otra consulta'].forEach((reason, i) => { %>
+            <input type="radio" name="service" id="motivo-<%= i %>" value="<%= reason %>" required <%= i === 0 ? 'checked' : '' %>><label for="motivo-<%= i %>"><%= reason %></label>
+          <% }) %>
+        </div>
+      </fieldset>
+
+      <div class="form__row">
+        <label class="field"><span class="field__label">Nombre *</span><input class="field__input" id="name" name="name" type="text" autocomplete="name" required></label>
+        <label class="field"><span class="field__label">Email *</span><input class="field__input" id="email" name="email" type="email" autocomplete="email" required></label>
+      </div>
+      <label class="field"><span class="field__label">Empresa u organización</span><input class="field__input" id="company" name="company" type="text" autocomplete="organization"></label>
+      <label class="field"><span class="field__label">Mensaje *</span><textarea class="field__textarea" id="message" name="message" rows="6" required placeholder="Cuéntame brevemente el motivo de tu mensaje."></textarea></label>
+
+      <div>
+        <button class="btn btn--primary btn--lg" type="submit">Preparar mensaje <span class="arrow" aria-hidden="true">→</span></button>
+      </div>
+      <p class="form__status" id="form-status" role="status" aria-live="polite"></p>
+    </form>
   </div>
 </section>
