@@ -44,6 +44,8 @@ export interface Lab {
   findings: string[];
   lessons: string[];
   tools: string[];
+  /** URL pública del writeup completo, si está publicado fuera del portafolio. */
+  writeupUrl?: string;
   featured: boolean;
 }
 
@@ -193,26 +195,51 @@ const baseSite = {
     },
   ] satisfies PracticeArea[],
 
-  // EMPIEZA VACÍO A PROPÓSITO: añade aquí tus laboratorios cuando los completes.
-  // Ejemplo de estructura:
-  // {
-  //   slug: 'mi-primer-laboratorio',
-  //   title: 'Nombre del laboratorio',
-  //   platform: 'Laboratorio propio',
-  //   difficulty: 'Principiante',
-  //   date: '2026-11',
-  //   category: 'Web',
-  //   filter: 'web',
-  //   summary: 'Resumen de una o dos frases.',
-  //   objective: 'Qué querías practicar o demostrar.',
-  //   environment: ['Máquina virtual local', 'Aplicación vulnerable propia'],
-  //   steps: ['Paso 1...', 'Paso 2...', 'Paso 3...'],
-  //   findings: ['Hallazgo o aprendizaje técnico...'],
-  //   lessons: ['Qué harías distinto la próxima vez...'],
-  //   tools: ['Navegador', 'Terminal'],
-  //   featured: true,
-  // },
-  projects: [] as Lab[],
+  // Laboratorios publicados. Cada entrada genera una página en /laboratorios/:slug.
+  projects: [
+    {
+      slug: '2026-11-tproot',
+      title: 'Tproot — backdoor en vsftpd 2.3.4',
+      platform: 'DockerLabs',
+      difficulty: 'Muy fácil',
+      date: '2026-11',
+      category: 'Linux',
+      filter: 'linux',
+      summary:
+        'Compromiso de una máquina DockerLabs mediante el backdoor de vsftpd 2.3.4 (CVE-2011-2523).',
+      objective:
+        'Identificar los servicios expuestos, validar la vulnerabilidad del FTP en un entorno controlado y documentar el acceso y su impacto.',
+      environment: [
+        'DockerLabs (contenedor Docker)',
+        'Kali Linux en máquina virtual',
+        'Red bridge de Docker 172.17.0.0/16',
+      ],
+      steps: [
+        'Enumeré los puertos con nmap y localicé FTP y HTTP como única superficie.',
+        'Descarté la web: solo había la página por defecto de Apache y rutas protegidas.',
+        'Comprobé el acceso anónimo al FTP, que fallaba por un error de configuración.',
+        'Identifiqué vsftpd 2.3.4 y la vulnerabilidad CVE-2011-2523 con searchsploit.',
+        'Reproduje el trigger del backdoor y obtuve una shell bind en el puerto 6200.',
+        'Confirmé los privilegios con id y documenté la evidencia antes de cerrar el laboratorio.',
+      ],
+      findings: [
+        'El banner de vsftpd 2.3.4 corresponde a la versión con el backdoor de CVE-2011-2523.',
+        'El trigger abre una shell con privilegios de root dentro del contenedor.',
+        'El error del FTP anónimo y la página por defecto de Apache eran pistas falsas.',
+        'Root en el contenedor no equivale a root en el host; un escape de Docker sería otro paso.',
+      ],
+      lessons: [
+        'Un banner de versión es una hipótesis que hay que validar, no una confirmación.',
+        'Antes de dar un exploit por fallido, conviene comprobar el estado del servicio.',
+        'Los intentos fallidos también documentan el proceso y explican las decisiones.',
+        'El análisis debe terminar en causa raíz, impacto y remediación, no solo en el acceso.',
+      ],
+      tools: ['nmap', 'gobuster', 'searchsploit', 'Metasploit', 'netcat'],
+      writeupUrl:
+        'https://gist.github.com/orangge2004/4c181e8dbdb0d1362c186e1329717c9a',
+      featured: true,
+    },
+  ] as Lab[],
 
   // Las certificaciones personales van en site.local.json (ignorado por Git).
   // El repositorio público se queda con el estado vacío.

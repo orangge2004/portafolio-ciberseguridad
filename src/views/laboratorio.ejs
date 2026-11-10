@@ -96,7 +96,14 @@
             <dd><%= lab.category %></dd>
           </div>
         </dl>
-        <a class="btn btn-primary btn-block" href="/contacto">Comentar este laboratorio</a>
+        <div class="fact-actions">
+          <% if (lab.writeupUrl) { %>
+            <a class="btn btn-primary btn-block" href="<%= lab.writeupUrl %>" target="_blank" rel="noopener noreferrer">
+              Ver writeup completo
+            </a>
+          <% } %>
+          <a class="btn <%= lab.writeupUrl ? 'btn-secondary' : 'btn-primary' %> btn-block" href="/contacto">Comentar este laboratorio</a>
+        </div>
       </div>
     </aside>
   </div>

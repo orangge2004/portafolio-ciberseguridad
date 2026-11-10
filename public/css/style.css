@@ -1331,6 +1331,11 @@ a:hover .arrow {
   line-height: 1.5;
 }
 
+.fact-actions {
+  display: grid;
+  gap: 0.6rem;
+}
+
 .ethics-band {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
