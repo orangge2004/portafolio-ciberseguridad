@@ -1,0 +1,81 @@
+#!/usr/bin/env bash
+# Pre-commit: bloquea secretos y archivos .env antes de confirmar.
+# Activar una vez por clon: git config core.hooksPath scripts/git-hooks
+# Saltar en un falso positivo confirmado: git commit --no-verify
+
+set -eu
+
+RED=$(printf '\033[0;31m')
+YELLOW=$(printf '\033[0;33m')
+GREEN=$(printf '\033[0;32m')
+NC=$(printf '\033[0m')
+
+fail() { echo "${RED}[pre-commit] $1${NC}" >&2; }
+warn() { echo "${YELLOW}[pre-commit] $1${NC}" >&2; }
+
+STAGED=$(git diff --cached --name-only --diff-filter=ACM)
+[ -z "$STAGED" ] && exit 0
+
+ERRORS=0
+
+# Detecta si un archivo es de texto. Usa `file` si está disponible y, si no,
+# deja que grep -I descarte los binarios.
+is_text() {
+  if command -v file >/dev/null 2>&1; then
+    file "$1" 2>/dev/null | grep -q "text\|empty\|JSON\|XML\|HTML\|JavaScript\|CSS\|Markdown"
+  else
+    git show ":$1" 2>/dev/null | grep -Iq .
+  fi
+}
+
+# 1. Bloquear archivos .env (se permite .env.example)
+while IFS= read -r f; do
+  base="${f##*/}"
+  case "$base" in
+    .env.example) ;;
+    .env|.env.*) fail "Archivo .env staged: $f"; ERRORS=$((ERRORS + 1)) ;;
+  esac
+done <<EOF
+$STAGED
+EOF
+
+# 2. Patrones de credenciales conocidos (AWS, GitHub, OpenAI/Stripe, Slack, claves privadas)
+PATTERNS='AKIA[0-9A-Z]{16}|ghp_[A-Za-z0-9]{36,}|gho_[A-Za-z0-9]{36,}|ghs_[A-Za-z0-9]{36,}|sk-[A-Za-z0-9]{20,}|sk_live_[A-Za-z0-9]{20,}|xox[baprs]-[A-Za-z0-9-]{10,}|-----BEGIN (RSA |OPENSSH |DSA |EC |PGP )?PRIVATE KEY'
+
+while IFS= read -r f; do
+  [ -f "$f" ] || continue
+  if is_text "$f" && git show ":$f" 2>/dev/null | grep -E -q "$PATTERNS"; then
+    fail "Patrón de credencial detectado en: $f"
+    ERRORS=$((ERRORS + 1))
+  fi
+done <<EOF
+$STAGED
+EOF
+
+# 3. Heurística: API_KEY="valor-con-pinta-real"
+HEURISTIC='(api[_-]?key|secret|token|password|passwd|access[_-]?key)[[:space:]]*[:=][[:space:]]*["'\''`]?[A-Za-z0-9_/+=-]{20,}'
+
+while IFS= read -r f; do
+  [ -f "$f" ] || continue
+  case "$f" in *.example|*.md|*.sample) continue ;; esac
+  if is_text "$f"; then
+    MATCHES=$(git show ":$f" 2>/dev/null | grep -nE -i "$HEURISTIC" || true)
+    if [ -n "$MATCHES" ]; then
+      warn "Posible credencial en $f (revisa antes de continuar):"
+      echo "$MATCHES" | head -3 >&2
+      ERRORS=$((ERRORS + 1))
+    fi
+  fi
+done <<EOF
+$STAGED
+EOF
+
+if [ "$ERRORS" -gt 0 ]; then
+  fail ""
+  fail "$ERRORS posible(s) fuga(s) detectada(s). Commit bloqueado."
+  fail "Si confirmas que es un falso positivo, usa: git commit --no-verify"
+  exit 1
+fi
+
+echo "${GREEN}[pre-commit] OK — sin secretos detectados${NC}"
+exit 0

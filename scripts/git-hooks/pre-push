@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+# Pre-push: bloquea pushes directos a las ramas permanentes.
+# Activar una vez por clon: git config core.hooksPath scripts/git-hooks
+# Saltar puntualmente: git push --no-verify
+
+set -eu
+
+RED=$(printf '\033[0;31m')
+GREEN=$(printf '\033[0;32m')
+NC=$(printf '\033[0m')
+
+PROTEGIDAS="develop main production"
+
+while read -r _local_ref _local_sha remote_ref _remote_sha; do
+  [ -n "${remote_ref:-}" ] || continue
+  rama="${remote_ref#refs/heads/}"
+  for p in $PROTEGIDAS; do
+    if [ "$rama" = "$p" ]; then
+      echo "${RED}[pre-push] Push directo a '$rama' bloqueado.${NC}" >&2
+      echo "Usa una rama de trabajo y un pull request:" >&2
+      echo "  git checkout -b fix/lo-que-sea" >&2
+      echo "  git push -u origin fix/lo-que-sea" >&2
+      echo "  gh pr create --base $rama" >&2
+      echo "(--no-verify lo salta si de verdad hace falta)" >&2
+      exit 1
+    fi
+  done
+done
+
+echo "${GREEN}[pre-push] OK${NC}"
+exit 0

@@ -37,6 +37,32 @@ npm run build      # compila TypeScript y copia las vistas a dist/
 npm start          # ejecuta la versión compilada
 ```
 
+## Flujo de trabajo
+
+Las ramas permanentes son `develop`, `main` y `production`, y no se hace push directo a ninguna. Cada cambio entra por una rama de trabajo y un pull request:
+
+```bash
+git checkout develop && git pull
+git checkout -b fix/descripcion-corta
+npm run typecheck && npm run build
+git add <archivos-concretos>
+git commit -m "fix: descripción en imperativo"
+git push -u origin fix/descripcion-corta
+```
+
+Después se abre el pull request hacia `develop` desde GitHub y se mergea con el CI en verde. La promoción sigue el mismo camino: `develop` → `main` → `production`.
+
+### Hooks locales
+
+```bash
+git config core.hooksPath scripts/git-hooks
+```
+
+- `pre-commit`: bloquea archivos `.env` y patrones de credenciales.
+- `pre-push`: bloquea pushes directos a `develop`, `main` y `production`.
+
+`core.hooksPath` es configuración local: hay que activarla una vez en cada clon. Los hooks se pueden saltar con `--no-verify` en un falso positivo confirmado; la protección real está en el ruleset de GitHub.
+
 ## Rutas
 
 | Ruta | Contenido |
@@ -89,7 +115,7 @@ El resto del contenido genérico (áreas de práctica, ruta de aprendizaje, nave
 
 ### Añadir tu primer laboratorio
 
-El array `projects` empieza vacío a propósito. Cuando termines un ejercicio, añade un objeto:
+Los laboratorios publicados viven en el array `projects`. Para añadir uno, crea un objeto:
 
 ```ts
 projects: [
@@ -179,14 +205,19 @@ Los tokens de diseño están al inicio de `public/css/style.css`:
 
 ```text
 .
-├── .github/workflows/ci.yml
+├── .github/
+│   ├── dependabot.yml
+│   └── workflows/ci.yml
 ├── public/
 │   ├── css/style.css
 │   ├── js/main.js
 │   ├── diplomas/              # privado, ignorado por Git
 │   └── favicon.svg
 ├── scripts/
-│   └── copy-views.mjs
+│   ├── copy-views.mjs
+│   └── git-hooks/
+│       ├── pre-commit
+│       └── pre-push
 ├── src/
 │   ├── config/site.ts          # contenido genérico y placeholders
 │   ├── server.ts
