@@ -1,36 +1,24 @@
 <%
   const isActive = (href) =>
     currentPath === href || (href !== '/' && currentPath.startsWith(href + '/'));
+  const handle = site.name.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').trim().replace(/\s+/g, '.');
 %>
 <header class="site-header">
-  <div class="container header-inner">
-    <a class="brand" href="/">
-      <span class="brand-mark" aria-hidden="true"><%= site.initials %></span>
-      <span class="brand-text">
-        <strong><%= site.name %></strong>
-        <span><%= site.role %></span>
-      </span>
-    </a>
+  <div class="container site-header__inner">
+    <a class="logo" href="/"><span class="logo__prompt" aria-hidden="true">~/</span><%= handle %><span class="visually-hidden"> (inicio)</span><span class="logo__cursor" aria-hidden="true"></span></a>
 
-    <button
-      class="nav-toggle"
-      type="button"
-      aria-expanded="false"
-      aria-controls="site-nav"
-    >
-      <span class="nav-toggle-icon" aria-hidden="true"></span>
-      <span>Menú</span>
-    </button>
-
-    <nav class="site-nav" id="site-nav" aria-label="Navegación principal">
-      <% site.nav.forEach((item) => { %>
-        <a
-          href="<%= item.href %>"
-          <%- isActive(item.href) ? 'aria-current="page"' : '' %>
-        ><%= item.label %></a>
-      <% }) %>
+    <nav class="nav" id="site-nav" aria-label="Navegación principal">
+      <ul class="nav__list" role="list">
+        <% site.nav.forEach((item, i) => { %>
+          <li><a class="nav__link" data-index="<%= String(i + 1).padStart(2, '0') %>" href="<%= item.href %>" <%- isActive(item.href) ? 'aria-current="page"' : '' %>><%= item.label %></a></li>
+        <% }) %>
+      </ul>
     </nav>
 
-    <a class="btn btn-primary header-cta" href="/contacto">Hablemos</a>
+    <div class="header-actions">
+      <button class="theme-toggle" type="button" data-theme-toggle>[ Modo claro ]</button>
+      <a class="btn btn--primary btn--sm" href="/contacto">Escríbeme <span class="arrow" aria-hidden="true">→</span></a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">[ Menú ]</button>
+    </div>
   </div>
 </header>

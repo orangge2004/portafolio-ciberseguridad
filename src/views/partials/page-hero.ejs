@@ -1,0 +1,16 @@
+<%# Cabecera de página interna: eyebrow, title, lead y actions opcionales [{ href, label, primary }]. %>
+<section class="page-hero">
+  <div class="bg-grid" aria-hidden="true"></div>
+  <div class="container">
+    <p class="eyebrow"><%= eyebrow %></p>
+    <h1><%= heading %></h1>
+    <p class="lead"><%= lead %></p>
+    <% if (typeof actions !== 'undefined' && actions.length > 0) { %>
+      <div class="page-hero__actions">
+        <% actions.forEach((action) => { %>
+          <a class="btn <%= action.primary ? 'btn--primary' : 'btn--ghost' %>" href="<%= action.href %>"><%= action.label %><% if (action.primary) { %> <span class="arrow" aria-hidden="true">→</span><% } %></a>
+        <% }) %>
+      </div>
+    <% } %>
+  </div>
+</section>

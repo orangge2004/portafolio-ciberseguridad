@@ -1,27 +1,26 @@
-<section class="page-hero error-page">
+<section class="page-hero">
+  <div class="bg-grid" aria-hidden="true"></div>
   <div class="container">
-    <p class="error-code" aria-hidden="true">404</p>
-    <h1>Esta página no existe.</h1>
+    <p class="display-mega error-code" aria-hidden="true">404</p>
+    <h1>Esta página no existe</h1>
     <p class="lead">
       Puede que el enlace haya cambiado o que la dirección esté mal escrita. Estas
       son las rutas principales del sitio.
     </p>
-    <div class="hero-actions">
-      <a class="btn btn-primary" href="/">Volver al inicio</a>
-      <a class="btn btn-secondary" href="/laboratorios">Ver laboratorios</a>
-    </div>
   </div>
 </section>
 
 <section class="section">
   <div class="container">
-    <div class="quick-links">
-      <% site.nav.forEach((item) => { %>
-        <a href="<%= item.href %>">
-          <span><%= item.label %></span>
-          <span class="arrow" aria-hidden="true">→</span>
-        </a>
+    <ul class="post-list">
+      <% site.nav.forEach((item, i) => { %>
+        <li class="post-row">
+          <span class="post-row__date"><%= String(i + 1).padStart(2, '0') %></span>
+          <h2 class="post-row__title"><a href="<%= item.href %>"><%= item.label %></a></h2>
+          <span></span>
+          <span class="post-row__arrow" aria-hidden="true">→</span>
+        </li>
       <% }) %>
-    </div>
+    </ul>
   </div>
 </section>

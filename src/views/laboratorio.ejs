@@ -1,111 +1,77 @@
 <section class="page-hero">
+  <div class="bg-grid" aria-hidden="true"></div>
   <div class="container">
     <a class="back-link" href="/laboratorios"><span aria-hidden="true">←</span> Todos los laboratorios</a>
-    <div class="project-heading">
-      <div class="project-heading-main">
-        <p class="eyebrow"><%= lab.category %> · <%= lab.date %></p>
-        <h1><%= lab.title %></h1>
-        <p class="lead"><%= lab.summary %></p>
-      </div>
-      <div class="project-heading-meta">
-        <span class="chip"><%= lab.platform %></span>
-        <span class="chip chip-muted"><%= lab.difficulty %></span>
-      </div>
-    </div>
+    <p class="eyebrow"><%= lab.category %> · <%= lab.date %></p>
+    <h1><%= lab.title %></h1>
+    <p class="lead"><%= lab.summary %></p>
+    <ul class="tag-list page-hero__tags">
+      <li class="tag tag--accent"><%= lab.platform %></li>
+      <li class="tag"><%= lab.difficulty %></li>
+    </ul>
   </div>
 </section>
 
 <section class="section">
-  <div class="container project-layout">
-    <div class="project-content">
+  <div class="container split">
+    <aside class="card sticky" aria-label="Ficha del laboratorio">
+      <h2 class="card__title">Ficha del laboratorio</h2>
+      <dl class="fact-list">
+        <div><dt>Plataforma</dt><dd><%= lab.platform %></dd></div>
+        <div><dt>Dificultad</dt><dd><%= lab.difficulty %></dd></div>
+        <div><dt>Fecha</dt><dd><%= lab.date %></dd></div>
+        <div><dt>Categoría</dt><dd><%= lab.category %></dd></div>
+      </dl>
+      <ul class="tag-list" aria-label="Herramientas">
+        <% lab.tools.forEach((tool) => { %>
+          <li class="tag"><%= tool %></li>
+        <% }) %>
+      </ul>
+      <% if (lab.writeupUrl) { %>
+        <a class="btn btn--primary btn--block" href="<%= lab.writeupUrl %>" target="_blank" rel="noopener noreferrer">Ver writeup completo</a>
+      <% } %>
+      <a class="btn <%= lab.writeupUrl ? 'btn--ghost' : 'btn--primary' %> btn--block" href="/contacto">Comentar este laboratorio</a>
+    </aside>
+
+    <article>
       <section class="case-section" aria-labelledby="objetivo-title">
-        <p class="section-kicker">01 · Contexto</p>
+        <p class="eyebrow">01 · Contexto</p>
         <h2 id="objetivo-title">Objetivo</h2>
         <p><%= lab.objective %></p>
       </section>
 
       <section class="case-section" aria-labelledby="entorno-title">
-        <p class="section-kicker">02 · Entorno</p>
+        <p class="eyebrow">02 · Entorno</p>
         <h2 id="entorno-title">Dónde practiqué</h2>
         <ul class="check-list">
-          <% lab.environment.forEach((item) => { %>
-            <li><span class="check" aria-hidden="true"></span><%= item %></li>
-          <% }) %>
+          <% lab.environment.forEach((item) => { %><li><%= item %></li><% }) %>
         </ul>
       </section>
 
       <section class="case-section" aria-labelledby="pasos-title">
-        <p class="section-kicker">03 · Proceso</p>
+        <p class="eyebrow">03 · Proceso</p>
         <h2 id="pasos-title">Pasos seguidos</h2>
-        <ol class="numbered-list">
-          <% lab.steps.forEach((step) => { %>
-            <li><%= step %></li>
-          <% }) %>
+        <ol class="steps-list">
+          <% lab.steps.forEach((step) => { %><li><%= step %></li><% }) %>
         </ol>
       </section>
 
       <section class="case-section" aria-labelledby="hallazgos-title">
-        <p class="section-kicker">04 · Evidencia</p>
+        <p class="eyebrow">04 · Evidencia</p>
         <h2 id="hallazgos-title">Hallazgos</h2>
-        <ul class="finding-list">
-          <% lab.findings.forEach((finding) => { %>
-            <li><span class="finding-mark" aria-hidden="true"></span><%= finding %></li>
-          <% }) %>
+        <ul class="check-list">
+          <% lab.findings.forEach((finding) => { %><li><%= finding %></li><% }) %>
         </ul>
       </section>
 
       <section class="case-section" aria-labelledby="aprendizajes-title">
-        <p class="section-kicker">05 · Reflexión</p>
+        <p class="eyebrow">05 · Reflexión</p>
         <h2 id="aprendizajes-title">Aprendizajes</h2>
-        <ul class="result-list">
-          <% lab.lessons.forEach((lesson) => { %>
-            <li><span class="check" aria-hidden="true"></span><%= lesson %></li>
-          <% }) %>
+        <ul class="check-list">
+          <% lab.lessons.forEach((lesson) => { %><li><%= lesson %></li><% }) %>
         </ul>
       </section>
-
-      <section class="case-section" aria-labelledby="herramientas-title">
-        <p class="section-kicker">Herramientas</p>
-        <h2 id="herramientas-title">Lo que utilicé</h2>
-        <ul class="chips">
-          <% lab.tools.forEach((tool) => { %>
-            <li class="chip"><%= tool %></li>
-          <% }) %>
-        </ul>
-      </section>
-    </div>
-
-    <aside class="project-sidebar" aria-label="Ficha del laboratorio">
-      <div class="fact-card">
-        <h2>Ficha del laboratorio</h2>
-        <dl class="fact-list">
-          <div>
-            <dt>Plataforma</dt>
-            <dd><%= lab.platform %></dd>
-          </div>
-          <div>
-            <dt>Dificultad</dt>
-            <dd><%= lab.difficulty %></dd>
-          </div>
-          <div>
-            <dt>Fecha</dt>
-            <dd><%= lab.date %></dd>
-          </div>
-          <div>
-            <dt>Categoría</dt>
-            <dd><%= lab.category %></dd>
-          </div>
-        </dl>
-        <div class="fact-actions">
-          <% if (lab.writeupUrl) { %>
-            <a class="btn btn-primary btn-block" href="<%= lab.writeupUrl %>" target="_blank" rel="noopener noreferrer">
-              Ver writeup completo
-            </a>
-          <% } %>
-          <a class="btn <%= lab.writeupUrl ? 'btn-secondary' : 'btn-primary' %> btn-block" href="/contacto">Comentar este laboratorio</a>
-        </div>
-      </div>
-    </aside>
+    </article>
   </div>
 </section>
 
