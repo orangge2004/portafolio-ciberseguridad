@@ -1,0 +1,16 @@
+<ol class="timeline" role="list">
+  <% site.learningPath.forEach((stage) => { %>
+    <li class="timeline__item">
+      <span class="timeline__date">Etapa <%= stage.stage %></span>
+      <div>
+        <h3 class="timeline__org"><%= stage.title %></h3>
+        <p class="timeline__role"><%= stage.description %></p>
+        <ul class="tag-list mt-4">
+          <% stage.topics.forEach((topic) => { %>
+            <li class="tag"><%= topic %></li>
+          <% }) %>
+        </ul>
+      </div>
+    </li>
+  <% }) %>
+</ol>

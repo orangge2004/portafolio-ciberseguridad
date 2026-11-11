@@ -67,22 +67,22 @@ app.get('/health', (_req, res) => {
 
 app.get('/', (_req, res) => {
   res.status(200).render('home', {
-    title: `${site.name} — ${site.role}`,
+    title: `${site.name} — Portafolio de ciberseguridad y hacking ético`,
     description: site.tagline,
   });
 });
 
 app.get('/sobre-mi', (_req, res) => {
   res.status(200).render('sobre-mi', {
-    title: `Sobre mí — ${site.name}`,
+    title: `Sobre mí: aprendiendo hacking ético — ${site.name}`,
     description:
-      'Portafolio de aprendizaje sobre hacking ético, laboratorios y seguridad ofensiva.',
+      'Quién soy, cómo practico hacking ético en entornos autorizados y la ruta de aprendizaje que sigo.',
   });
 });
 
 app.get('/practicas', (_req, res) => {
   res.status(200).render('practicas', {
-    title: `Áreas de práctica — ${site.name}`,
+    title: `Áreas de práctica en ciberseguridad — ${site.name}`,
     description:
       'Áreas de práctica y aprendizaje: redes, Linux, seguridad web, reconocimiento, laboratorios y documentación.',
   });
@@ -94,7 +94,7 @@ app.get('/servicios', (_req, res) => {
 
 app.get('/laboratorios', (_req, res) => {
   res.status(200).render('laboratorios', {
-    title: `Laboratorios — ${site.name}`,
+    title: `Laboratorios y writeups de ciberseguridad — ${site.name}`,
     description:
       'Ejercicios prácticos y writeups de laboratorios de ciberseguridad en entornos autorizados.',
   });
@@ -113,7 +113,7 @@ app.get('/laboratorios/:slug', (req, res, next) => {
   }
 
   res.status(200).render('laboratorio', {
-    title: `${lab.title} — ${site.name}`,
+    title: `${lab.title} · Writeup — ${site.name}`,
     description: lab.summary,
     lab,
   });
@@ -125,7 +125,7 @@ app.get('/proyectos/:slug', (req, res) => {
 
 app.get('/formacion', (_req, res) => {
   res.status(200).render('formacion', {
-    title: `Formación — ${site.name}`,
+    title: `Formación y certificaciones en ciberseguridad — ${site.name}`,
     description:
       'Certificaciones completadas en Platzi, diplomas verificables y ruta de aprendizaje en ciberseguridad.',
   });
