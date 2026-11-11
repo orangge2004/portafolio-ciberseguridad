@@ -276,6 +276,19 @@ const baseSite = {
 export type Site = typeof baseSite;
 
 function loadLocalSite(): Partial<Site> {
+  // En despliegues (Vercel, CI) no existe site.local.json porque está ignorado por Git.
+  // Permite inyectar los mismos datos con la variable de entorno SITE_LOCAL_JSON.
+  const envJson = process.env.SITE_LOCAL_JSON?.trim();
+  if (envJson) {
+    try {
+      return JSON.parse(envJson) as Partial<Site>;
+    } catch (error) {
+      console.warn(
+        `SITE_LOCAL_JSON no es JSON válido: ${error instanceof Error ? error.message : String(error)}`,
+      );
+    }
+  }
+
   const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
   const localPath = path.join(projectRoot, 'site.local.json');
 
@@ -293,4 +306,18 @@ function loadLocalSite(): Partial<Site> {
   }
 }
 
-export const site: Site = { ...baseSite, ...loadLocalSite() };
+/**
+ * Datos públicos que se pueden sobrescribir desde el hosting sin tocar el
+ * repositorio. Útil para que el nombre del logo no sea un placeholder cuando
+ * site.local.json no viaja en el despliegue.
+ */
+function loadEnvOverrides(): Partial<Site> {
+  const overrides: Partial<Site> = {};
+  if (process.env.SITE_NAME) overrides.name = process.env.SITE_NAME;
+  if (process.env.SITE_INITIALS) overrides.initials = process.env.SITE_INITIALS;
+  if (process.env.SITE_EMAIL) overrides.email = process.env.SITE_EMAIL;
+  if (process.env.SITE_LOCATION) overrides.location = process.env.SITE_LOCATION;
+  return overrides;
+}
+
+export const site: Site = { ...baseSite, ...loadLocalSite(), ...loadEnvOverrides() };
