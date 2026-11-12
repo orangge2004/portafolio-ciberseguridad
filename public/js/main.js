@@ -29,6 +29,33 @@ if (themeToggle) {
   });
 }
 
+// Marca del pie: escala el nombre para que ocupe el ancho disponible sin cortarse.
+const wordmarkText = document.querySelector('.site-footer__wordmark > span');
+if (wordmarkText) {
+  const wordmarkBox = wordmarkText.parentElement;
+  const fitWordmark = () => {
+    if (!wordmarkBox) return;
+    wordmarkText.style.fontSize = '';
+    const available = wordmarkBox.clientWidth;
+    const rendered = wordmarkText.getBoundingClientRect().width;
+    if (available <= 0 || rendered <= 0) return;
+    const fallbackSize = parseFloat(getComputedStyle(wordmarkText).fontSize);
+    const fitted = Math.min(fallbackSize * (available / rendered) * 0.98, 16 * 16);
+    wordmarkText.style.fontSize = `${fitted}px`;
+  };
+
+  fitWordmark();
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(fitWordmark);
+  }
+
+  let wordmarkTimer;
+  window.addEventListener('resize', () => {
+    window.clearTimeout(wordmarkTimer);
+    wordmarkTimer = window.setTimeout(fitWordmark, 150);
+  }, { passive: true });
+}
+
 // Revelado al hacer scroll
 const revealItems = document.querySelectorAll('.reveal');
 if ('IntersectionObserver' in window) {
