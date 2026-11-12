@@ -1020,18 +1020,25 @@ p { max-width: 65ch; text-wrap: pretty; }
 .site-footer__links a { color: var(--text-muted); transition: color var(--dur-fast); }
 .site-footer__links a:hover { color: var(--accent); }
 
-/* Marca gigante a sangre (Douglus) */
+/* Marca gigante centrada: el texto se ajusta al ancho disponible y nunca se corta */
 .site-footer__wordmark {
-  font-family: var(--font-display);
-  font-size: clamp(4rem, 1rem + 15vw, 16rem);
-  font-weight: 700;
-  line-height: 0.8;
-  letter-spacing: -0.06em;
-  text-transform: uppercase;
-  white-space: nowrap;
+  text-align: center;
   color: var(--text);
   margin-bottom: -0.08em;
   user-select: none;
+}
+.site-footer__wordmark span {
+  display: inline-block;
+  font-family: var(--font-display);
+  /* Tamaño de partida prudente; main.js lo ajusta al ancho real del nombre. */
+  font-size: min(12rem, 13vw);
+  font-weight: 700;
+  line-height: 0.8;
+  letter-spacing: -0.06em;
+  /* Compensa el espaciado negativo que se aplica tras el último carácter. */
+  padding-right: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
 }
 .site-footer__bar {
   display: flex; justify-content: space-between; align-items: center; gap: var(--sp-4); flex-wrap: wrap;
